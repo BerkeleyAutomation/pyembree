@@ -1,17 +1,35 @@
+import logging
+
+
+log = logging.getLogger('pyembree')
+
 cdef void print_error(RTCError code):
     if code == RTC_NO_ERROR:
-        print "ERROR: No error"
+        log.error("ERROR: No error")
     elif code == RTC_UNKNOWN_ERROR:
-        print "ERROR: Unknown error"
+        log.error("ERROR: Unknown error")
     elif code == RTC_INVALID_ARGUMENT:
-        print "ERROR: Invalid argument"
+        log.error("ERROR: Invalid argument")
     elif code == RTC_INVALID_OPERATION:
-        print "ERROR: Invalid operation"
+        log.error("ERROR: Invalid operation")
     elif code == RTC_OUT_OF_MEMORY:
-        print "ERROR: Out of memory"
+        log.error("ERROR: Out of memory")
     elif code == RTC_UNSUPPORTED_CPU:
-        print "ERROR: Unsupported CPU"
+        log.error("ERROR: Unsupported CPU")
     elif code == RTC_CANCELLED:
-        print "ERROR: Cancelled"
+        log.error("ERROR: Cancelled")
     else:
         raise RuntimeError
+
+
+cdef class EmbreeDevice:
+    def __init__(self):
+        self.device = rtcNewDevice(NULL)
+
+    def __dealloc__(self):
+        rtcDeleteDevice(self.device)
+
+    def __repr__(self):
+        return 'Embree version:  {0}.{1}.{2}'.format(RTCORE_VERSION_MAJOR,
+                                                     RTCORE_VERSION_MINOR,
+                                                     RTCORE_VERSION_PATCH)

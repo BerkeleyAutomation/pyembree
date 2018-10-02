@@ -22,8 +22,8 @@ install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no 
-  - conda config --add channels scopatz
+  - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels conda-forge
   - conda update -q conda
   - conda install conda-build jinja2 setuptools binstar patchelf nose
   # Useful for debugging any issues with conda
@@ -33,8 +33,9 @@ install:
   - ./.travis-install.sh
 
 script:
-   - echo "No tests yet!"
-#  - export PATH="$HOME/miniconda/bin:$PATH"
-#  - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
-#  - nosetests -w tests
-
+   - echo "Running tests with nosetests"
+   - export PATH="$HOME/miniconda/bin:$PATH"
+   - export LD_LIBRARY_PATH="$HOME/miniconda/lib:$LD_LIBRARY_PATH"
+   - nosetests -w tests
+   - echo "Running all examples"
+   - cd examples && for i in `find . -type f -name "*.py"`; do echo $i; python $i --no-plots; done && cd ..
